@@ -4,7 +4,7 @@
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut({
-      redirectTo: "http://localhost:3000",
+      redirectTo: "/",
     });
     if (error) console.log(error)
   }
