@@ -28,7 +28,7 @@
               </summary>
               <ul v-if="user" class="bg-base-100 rounded-t-none p-2">
                 <li>
-                  <RouterLink to="/edit-user">Edit Profile</RouterLink>
+                  <RouterLink to="/edit">Edit Profile</RouterLink>
                 </li>
                 <li @click="logout">
                   <p>
