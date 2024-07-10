@@ -2,6 +2,10 @@
   const supabase = useSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  definePageMeta({
+    middleware: "auth",
+  });
+
   const updateUser = async () => {
     const { data, error } = await supabase.auth.updateUser({
       data: {
