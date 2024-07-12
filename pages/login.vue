@@ -2,6 +2,8 @@
   const supabase = useSupabaseClient()
   const email = ref('')
   const password = ref('')
+  const inProgress = ref(false)
+  const isDisabled = computed(() => inProgress.value)
 
   const signInWithOtp = async () => {
     const { error } = await supabase.auth.signInWithOtp({
@@ -14,16 +16,23 @@
   }
 
   const signInWithPassword = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.value,
-      password: password.value,
-    })
-    if (data) {
-      console.log("Login successful", data);
-      navigateTo("/");
+    inProgress.value = true
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.value,
+        password: password.value,
+      })
+      if (data.user) {
+        console.log("User", data.user.id, "logged in.");
+        navigateTo("/");
+      }
+
+      if (error) {
+        console.log(error);
+      }
     }
-    if (error) {
-      console.log("Login failed", error);
+    finally {
+      inProgress.value = false
     }
   }
 
@@ -65,7 +74,7 @@
             <input type="password" placeholder="Password" v-model="password" />
           </label>
 
-          <button class="btn btn-primary" @click="signInWithPassword">
+          <button class="btn btn-primary" @click="signInWithPassword" :disabled="isDisabled">
             Login
           </button>
         </div>

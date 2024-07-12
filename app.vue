@@ -1,6 +1,6 @@
 <script setup lang="ts">
   const supabase = useSupabaseClient()
-  const user = useSupabaseUser()
+  const { data: { user } } = await supabase.auth.getUser()
 
   const logout = async () => {
     const { error } = await supabase.auth.signOut({
@@ -21,12 +21,16 @@
           <li>
             <RouterLink to="/">Home</RouterLink>
           </li>
+
           <li v-if="user">
             <details>
               <summary>
-                {{ user.email }}
+                {{ user.user_metadata?.username ?? user.email }}
               </summary>
               <ul v-if="user" class="bg-base-100 rounded-t-none p-2">
+                <li>
+                  <RouterLink to="/ffxiv_stats">Stats</RouterLink>
+                </li>
                 <li>
                   <RouterLink to="/edit">Edit Profile</RouterLink>
                 </li>
@@ -45,6 +49,9 @@
       </div>
     </div>
     <NuxtPage />
+    <div class="flex justify-center">
+      <Alert header="Header" message="Message" class="hidden" />
+    </div>
   </NuxtLayout>
 </template>
 
